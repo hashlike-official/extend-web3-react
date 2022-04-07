@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { useTransfer, useWeb3Store } from "web3-react-wrapper";
+import {
+  useTransfer,
+  useWeb3Store,
+} from "@hashlike-official/extend-web3-react-wrapper";
 
 export default function Transfer() {
   const account = useWeb3Store((state) => state.account);

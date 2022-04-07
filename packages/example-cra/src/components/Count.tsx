@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { formatUnits, useProvider, useWeb3Store } from "web3-react-wrapper";
+import {
+  formatUnits,
+  useProvider,
+  useWeb3Store,
+} from "@hashlike-official/extend-web3-react-wrapper";
 import deployedABI from "../../deployedABI.json";
 import { callWithPending } from "../utils";
 

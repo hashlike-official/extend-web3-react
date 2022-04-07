@@ -1,4 +1,4 @@
-import { InitWalletLib } from "web3-react-wrapper";
+import { InitWalletLib } from "@hashlike-official/extend-web3-react-wrapper";
 import "./App.css";
 import BlockNumber from "./components/BlockNumber";
 import Count from "./components/Count";

@@ -1,4 +1,7 @@
-import { CHAINS, useWeb3Store } from "web3-react-wrapper";
+import {
+  CHAINS,
+  useWeb3Store,
+} from "@hashlike-official/extend-web3-react-wrapper";
 
 export default function Chain() {
   const { useChainId } = useWeb3Store((state) => state.hooks);

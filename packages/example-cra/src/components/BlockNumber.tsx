@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useProvider } from "web3-react-wrapper";
+import { useProvider } from "@hashlike-official/extend-web3-react-wrapper";
 
 export default function BlockNumber() {
   const provider = useProvider();
