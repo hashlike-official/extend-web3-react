@@ -55,8 +55,18 @@ export class Kaikas extends Connector {
 
     if (typeof window.klaytn === "undefined") {
       this.actions.reportError(new NoKaikasError());
+    } else {
+      this.provider = window.klaytn as KaikasProvider;
+      this.customProvider = new Caver(window.klaytn);
+      if (connectEagerly) void this.connectEagerly();
     }
-    this.provider = window.klaytn as KaikasProvider;
+  }
+
+  /** {@inheritdoc Connector.connectEagerly} */
+  public async connectEagerly(): Promise<void> {
+    const cancelActivation = this.actions.startActivation();
+
+    if (!this.provider || !this.provider.isKaikas) return cancelActivation();
 
     this.provider.on("networkChanged", () => {
       this.actions.update({ chainId: Number(this.provider!.networkVersion) });
@@ -69,17 +79,6 @@ export class Kaikas extends Connector {
         this.actions.update({ accounts });
       }
     });
-
-    this.customProvider = new Caver(window.klaytn);
-
-    if (connectEagerly) void this.connectEagerly();
-  }
-
-  /** {@inheritdoc Connector.connectEagerly} */
-  public async connectEagerly(): Promise<void> {
-    const cancelActivation = this.actions.startActivation();
-
-    if (!this.provider || !this.provider.isKaikas) return cancelActivation();
 
     return Promise.all([this.provider.enable()])
       .then((accounts) => {
