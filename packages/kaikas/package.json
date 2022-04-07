@@ -1,5 +1,5 @@
 {
-  "name": "@extend-web3-react/kaikas",
+  "name": "@hashlike-official/extend-web3-react-kaikas",
   "description": "kaikas wallet connector for web3-react",
   "keywords": [
     "web3-react",
@@ -32,5 +32,6 @@
   },
   "devDependencies": {
     "@web3-react/store": "^8.0.16-beta.0"
-  }
+  },
+  "gitHead": "fcbb83ca413beadb485f49bc7653949cdfe85c58"
 }

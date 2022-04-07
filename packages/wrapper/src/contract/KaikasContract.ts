@@ -10,7 +10,7 @@ import {
   SendParamType,
   WrappedContract,
 } from "../types/WrappedContract";
-import { Contract } from "@extend-web3-react/kaikas";
+import { Contract } from "@hashlike-official/extend-web3-react-kaikas";
 
 export class KaikasContract extends WrappedContract<Contract> {
   call = async ({ methodName, params = [], option }: CallParamType) => {

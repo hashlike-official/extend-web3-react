@@ -1,4 +1,4 @@
-# @extend-web3-react/kaikas
+# @hashlike-official/extend-web3-react-kaikas
 
 ## example
 

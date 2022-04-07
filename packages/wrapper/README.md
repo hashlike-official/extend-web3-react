@@ -1,4 +1,4 @@
-# @extend-web3-react/wrapper
+# @hashlike-official/extend-web3-react-wrapper
 
 It offers a common interface for different wallet providers.  
 currently, metamask and kaikas.

@@ -5,7 +5,7 @@
   @typescript-eslint/no-explicit-any,
 */
 
-import { Caver } from "@extend-web3-react/kaikas";
+import { Caver } from "@hashlike-official/extend-web3-react-kaikas";
 import { KaikasContract } from "../contract";
 import { WalletLibrary } from "../types/WalletLibrary";
 
