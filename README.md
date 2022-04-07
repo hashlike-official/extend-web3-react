@@ -1,3 +1,1 @@
-# w3caver-react
-
-test
+# extend-web3-react
