@@ -45,7 +45,7 @@ export function useTransfer() {
   );
 }
 
-export function InitWalletLib() {
+export function InitWalletLib(chainId?: number) {
   const connect = useWeb3Store((state) => state.connect);
   const fetchBalance = useWeb3Store((state) => state.fetchBalance);
   const { useAccount } = useWeb3Store((state) => state.hooks);
@@ -56,7 +56,7 @@ export function InitWalletLib() {
   useEffect(() => {
     const walletType = window.localStorage.getItem("walletType");
     if (walletType) {
-      void connect(walletType as WalletType);
+      void connect(walletType as WalletType, chainId);
     }
   }, []); // eslint-disable-line
 
