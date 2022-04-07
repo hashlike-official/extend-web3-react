@@ -1,0 +1,25 @@
+{
+  "name": "extend-web3-react",
+  "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "clean": "lerna clean --yes",
+    "test": "jest",
+    "build": "lerna run build",
+    "dev": "lerna run dev --parallel"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^4.0.0",
+    "eslint": "^8.12.0",
+    "eslint-plugin-react-hooks": "^4.4.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "typescript": "^4.6.3",
+    "@tsconfig/recommended": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "@types/react": "^17.0.43"
+  }
+}
