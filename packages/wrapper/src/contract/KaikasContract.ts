@@ -5,11 +5,7 @@
   @typescript-eslint/no-unsafe-return,
   @typescript-eslint/no-explicit-any
 */
-import {
-  CallParamType,
-  SendParamType,
-  WrappedContract,
-} from "../types/WrappedContract";
+import { CallParamType, SendParamType, WrappedContract } from "../types/WrappedContract";
 import { Contract } from "@hashlike-official/extend-web3-react-kaikas";
 
 export class KaikasContract extends WrappedContract<Contract> {
@@ -18,9 +14,7 @@ export class KaikasContract extends WrappedContract<Contract> {
       throw Error("Not Exist Method");
     }
     try {
-      const result = await this.originContract.methods[methodName](
-        ...params
-      ).call({ ...option });
+      const result = await this.originContract.methods[methodName](...params).call({ ...option });
       return result;
     } catch (e) {
       if (e instanceof Error) {
@@ -35,9 +29,7 @@ export class KaikasContract extends WrappedContract<Contract> {
     }
     let gas;
     if (!option?.gasLimit) {
-      gas = await this.originContract.methods[methodName](
-        ...params
-      ).estimateGas({
+      gas = await this.originContract.methods[methodName](...params).estimateGas({
         ...option,
       });
     } else {
@@ -45,9 +37,7 @@ export class KaikasContract extends WrappedContract<Contract> {
     }
     console.log(gas);
 
-    const result = await this.originContract.methods[methodName](
-      ...params
-    ).send({ ...option, gas });
+    const result = await this.originContract.methods[methodName](...params).send({ ...option, gas });
     return result;
   };
 }

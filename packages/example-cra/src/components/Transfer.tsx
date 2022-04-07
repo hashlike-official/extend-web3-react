@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  useTransfer,
-  useWeb3Store,
-} from "@hashlike-official/extend-web3-react-wrapper";
+import { useTransfer, useWeb3Store } from "@hashlike-official/extend-web3-react-wrapper";
 
 export default function Transfer() {
   const account = useWeb3Store((state) => state.account);
@@ -25,11 +22,7 @@ export default function Transfer() {
           setSendAddress(e.target.value);
         }}
       ></input>
-      <input
-        type="number"
-        placeholder="KLAY"
-        onChange={(e) => setSendKlay(Number(e.target.value))}
-      ></input>
+      <input type="number" placeholder="KLAY" onChange={(e) => setSendKlay(Number(e.target.value))}></input>
       <button onClick={sendButtonHandler}>전송</button>
     </section>
   );

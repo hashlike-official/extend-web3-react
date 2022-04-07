@@ -44,9 +44,7 @@ export const useWeb3Store = create<WalletLibraryType>((set, get) => ({
 
     switch (type) {
       case "MetaMask":
-        await metamaskConnector.activate(
-          chainId ? getAddChainParameters(chainId) : undefined
-        );
+        await metamaskConnector.activate(chainId ? getAddChainParameters(chainId) : undefined);
         set({
           connector: metamaskConnector,
           hooks: metamaskHooks,

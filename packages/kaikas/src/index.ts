@@ -4,11 +4,7 @@
   @typescript-eslint/no-unsafe-argument
 */
 
-import type {
-  Actions,
-  AddEthereumChainParameter,
-  Provider,
-} from "@web3-react/types";
+import type { Actions, AddEthereumChainParameter, Provider } from "@web3-react/types";
 import { Connector } from "@web3-react/types";
 import Caver, { AbiItem, Contract } from "caver-js";
 
@@ -50,9 +46,7 @@ export class Kaikas extends Connector {
     super(actions);
 
     if (connectEagerly && typeof window === "undefined") {
-      throw new Error(
-        "connectEagerly = true is invalid for SSR, instead use the connectEagerly method in a useEffect"
-      );
+      throw new Error("connectEagerly = true is invalid for SSR, instead use the connectEagerly method in a useEffect");
     }
 
     if (typeof window === "undefined") {
@@ -113,9 +107,7 @@ export class Kaikas extends Connector {
    * argument is of type AddEthereumChainParameter, in which case the user will be prompted to add the chain with the
    * specified parameters first, before being prompted to switch.
    */
-  public async activate(
-    desiredChainIdOrChainParameters?: number | AddEthereumChainParameter
-  ): Promise<void> {
+  public async activate(desiredChainIdOrChainParameters?: number | AddEthereumChainParameter): Promise<void> {
     if (!this.provider) return this.actions.reportError(new NoKaikasError());
 
     if (!this.provider._kaikas.isEnabled()) this.actions.startActivation();

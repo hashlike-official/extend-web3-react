@@ -7,11 +7,7 @@
   @typescript-eslint/no-explicit-any,
 */
 import { Contract } from "@ethersproject/contracts";
-import {
-  CallParamType,
-  SendParamType,
-  WrappedContract,
-} from "../types/WrappedContract";
+import { CallParamType, SendParamType, WrappedContract } from "../types/WrappedContract";
 
 export class MetamaskContract extends WrappedContract<Contract> {
   call = async ({ methodName, params = [], option }: CallParamType) => {
@@ -41,10 +37,7 @@ export class MetamaskContract extends WrappedContract<Contract> {
       option.gasPrice = await this.originContract.provider.getGasPrice();
     }
     if (!option.gasLimit) {
-      option.gasLimit = await this.originContract.estimateGas[methodName](
-        ...params,
-        { ...option }
-      );
+      option.gasLimit = await this.originContract.estimateGas[methodName](...params, { ...option });
     }
 
     const result = await this.originContract[methodName](...params, {

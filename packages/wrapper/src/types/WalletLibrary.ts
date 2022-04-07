@@ -11,14 +11,6 @@ export abstract class WalletLibrary<T> {
 
   abstract getBalanceOf: (address: string) => Promise<string>;
   abstract getBlockNumber: () => Promise<number>;
-  abstract transfer: (
-    from: string,
-    to: string,
-    value: number
-  ) => Promise<boolean>;
-  abstract contract: (
-    jsonInterface: any,
-    address: string,
-    account?: string
-  ) => WrappedContract<any>;
+  abstract transfer: (from: string, to: string, value: number) => Promise<boolean>;
+  abstract contract: (jsonInterface: any, address: string, account?: string) => WrappedContract<any>;
 }

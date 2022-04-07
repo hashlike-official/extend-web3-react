@@ -1,8 +1,4 @@
-export default function Card({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[];
-}) {
+export default function Card({ children }: { children: JSX.Element | JSX.Element[] }) {
   return (
     <div
       style={{

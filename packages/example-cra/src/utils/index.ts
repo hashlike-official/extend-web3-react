@@ -15,3 +15,9 @@ export async function callWithPending(promi: Promise<any>) {
     }));
   }
 }
+
+export function useChain() {
+  const { useChainId } = useWeb3Store((state) => state.hooks);
+  const chainId = useChainId();
+  return chainId;
+}

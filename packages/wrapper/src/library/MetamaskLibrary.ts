@@ -6,12 +6,7 @@
 */
 
 import { Web3Provider } from "@ethersproject/providers";
-import {
-  formatEther,
-  parseEther,
-  formatUnits,
-  parseUnits,
-} from "@ethersproject/units";
+import { formatEther, parseEther, formatUnits, parseUnits } from "@ethersproject/units";
 import { Contract } from "@ethersproject/contracts";
 import { WalletLibrary } from "../types/WalletLibrary";
 import { MetamaskContract } from "../contract";
@@ -54,11 +49,7 @@ export class MetamaskLibrary extends WalletLibrary<Web3Provider> {
       signer = this.provider.getSigner(account);
     }
 
-    const originContract = new Contract(
-      address,
-      jsonInterface,
-      signer ? signer : this.provider
-    );
+    const originContract = new Contract(address, jsonInterface, signer ? signer : this.provider);
     return new MetamaskContract(originContract);
   };
 }

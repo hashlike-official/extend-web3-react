@@ -1,25 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  formatUnits,
-  useProvider,
-  useWeb3Store,
-} from "@hashlike-official/extend-web3-react-wrapper";
+import { formatUnits, useProvider, useWeb3Store } from "@hashlike-official/extend-web3-react-wrapper";
 import deployedABI from "../../deployedABI.json";
-import { callWithPending } from "../utils";
+import { callWithPending, useChain } from "../utils";
 
 const deployedAddress = "0xb4bF60383C64D47F2E667f2fE8F7ED0c9380f770";
 
 function useCountContract() {
   const provider = useProvider();
   const account = useWeb3Store((state) => state.account);
+  const chainId = useChain();
   return useMemo(() => {
+    if (chainId !== 1001) return;
     return provider?.contract(deployedABI, deployedAddress, account);
-  }, [provider, account]);
+  }, [provider, account, chainId]);
 }
 
 export default function Count() {
   const contract = useCountContract();
   const [count, setCount] = useState(0);
+  const chainId = useChain();
 
   const getCount = useCallback(async () => {
     if (contract) {
@@ -67,6 +66,7 @@ export default function Count() {
       <h1>count: {count}</h1>
       <button onClick={() => plusCount()}>plus</button>
       <button onClick={() => minusCount()}>minus</button>
+      {chainId !== 1001 && <h4>This exam need to connect Klaytn Baobab network</h4>}
     </>
   );
 }

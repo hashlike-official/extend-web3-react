@@ -38,10 +38,7 @@ export class KaikasLibrary extends WalletLibrary<Caver> {
   };
 
   contract = (jsonInterface: any, address: string, account?: string) => {
-    const originContract = new this.provider.klay.Contract(
-      jsonInterface,
-      address
-    );
+    const originContract = new this.provider.klay.Contract(jsonInterface, address);
     if (account) {
       originContract.options.from = account;
     }

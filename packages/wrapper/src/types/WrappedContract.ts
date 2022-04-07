@@ -30,15 +30,7 @@ export abstract class WrappedContract<T> {
     this.originContract = originContract;
   }
 
-  abstract call: ({
-    methodName,
-    params,
-    option,
-  }: CallParamType) => Promise<any>;
+  abstract call: ({ methodName, params, option }: CallParamType) => Promise<any>;
 
-  abstract send: ({
-    methodName,
-    params,
-    option,
-  }: SendParamType) => Promise<any>;
+  abstract send: ({ methodName, params, option }: SendParamType) => Promise<any>;
 }
