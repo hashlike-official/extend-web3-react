@@ -54,7 +54,7 @@ export class Kaikas extends Connector {
     }
 
     if (typeof window.klaytn === "undefined") {
-      throw new NoKaikasError();
+      this.actions.reportError(new NoKaikasError());
     }
     this.provider = window.klaytn as KaikasProvider;
 
@@ -112,20 +112,27 @@ export class Kaikas extends Connector {
 
     if (!this.provider._kaikas.isEnabled()) this.actions.startActivation();
 
-    return Promise.all([this.provider.enable()]).then((accounts) => {
-      const receivedChainId = Number(this.provider!.networkVersion);
-      const desiredChainId =
-        typeof desiredChainIdOrChainParameters === "number"
-          ? desiredChainIdOrChainParameters
-          : desiredChainIdOrChainParameters?.chainId;
+    return Promise.all([this.provider.enable()])
+      .then((accounts) => {
+        const receivedChainId = Number(this.provider!.networkVersion);
+        const desiredChainId =
+          typeof desiredChainIdOrChainParameters === "number"
+            ? desiredChainIdOrChainParameters
+            : desiredChainIdOrChainParameters?.chainId;
 
-      if (!desiredChainId || receivedChainId === desiredChainId)
-        return this.actions.update({
-          chainId: receivedChainId,
-          accounts: accounts[0],
-        });
-
-      throw Error(`can't switch to chain ID: ${desiredChainId}. please manually switch network...`);
-    });
+        if (!desiredChainId || receivedChainId === desiredChainId) {
+          return this.actions.update({
+            chainId: receivedChainId,
+            accounts: accounts[0],
+          });
+        } else {
+          throw Error(`can't switch to chain ID: ${desiredChainId}. please manually switch network...`);
+        }
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          this.actions.reportError(e);
+        }
+      });
   }
 }
