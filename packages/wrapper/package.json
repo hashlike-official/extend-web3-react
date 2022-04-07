@@ -12,7 +12,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "files": [
     "dist/*"
   ],
@@ -28,7 +28,7 @@
     "@ethersproject/contracts": "^5.6.0",
     "@ethersproject/providers": "^5.6.2",
     "@ethersproject/units": "^5.6.0",
-    "@hashlike-official/extend-web3-react-kaikas": "^1.0.0",
+    "@hashlike-official/extend-web3-react-kaikas": "^1.0.1",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.23",
     "@types/react": "^17.0.43",
