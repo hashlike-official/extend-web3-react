@@ -125,7 +125,7 @@ export class Kaikas extends Connector {
           accounts: accounts[0],
         });
 
-      alert(`please change network to chainID: ${desiredChainId}`);
+      throw Error(`can't switch to chain ID: ${desiredChainId}. please manually switch network...`);
     });
   }
 }
