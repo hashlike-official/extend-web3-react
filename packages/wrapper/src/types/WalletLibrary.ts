@@ -1,6 +1,10 @@
-import { WrappedContract } from "./WrappedContract";
+/* eslint-disable 
+  @typescript-eslint/no-explicit-any,
+*/
 
-export type WalletType = "MetaMask" | "Kaikas";
+import { WrappedContract } from './WrappedContract';
+
+export type WalletType = 'MetaMask' | 'Kaikas';
 
 export abstract class WalletLibrary<T> {
   protected readonly provider: T;
@@ -9,8 +13,11 @@ export abstract class WalletLibrary<T> {
     this.provider = provider;
   }
 
-  abstract getBalanceOf: (address: string) => Promise<string>;
-  abstract getBlockNumber: () => Promise<number>;
-  abstract transfer: (from: string, to: string, value: number) => Promise<boolean>;
-  abstract contract: (jsonInterface: any, address: string, account?: string) => WrappedContract<any>;
+  abstract getBalanceOf(address: string): Promise<string>;
+
+  abstract getBlockNumber(): Promise<number>;
+
+  abstract transfer(from: string, to: string, value: number): Promise<boolean>;
+
+  abstract contract(jsonInterface: any, address: string, account?: string): WrappedContract<any>;
 }

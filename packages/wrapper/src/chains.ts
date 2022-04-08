@@ -1,14 +1,14 @@
-import type { AddEthereumChainParameter } from "@web3-react/types";
+import type { AddEthereumChainParameter } from '@web3-react/types';
 
-const ETH: AddEthereumChainParameter["nativeCurrency"] = {
-  name: "Ether",
-  symbol: "ETH",
+const ETH: AddEthereumChainParameter['nativeCurrency'] = {
+  name: 'Ether',
+  symbol: 'ETH',
   decimals: 18,
 };
 
-const MATIC: AddEthereumChainParameter["nativeCurrency"] = {
-  name: "Matic",
-  symbol: "MATIC",
+const MATIC: AddEthereumChainParameter['nativeCurrency'] = {
+  name: 'Matic',
+  symbol: 'MATIC',
   decimals: 18,
 };
 
@@ -18,8 +18,8 @@ interface BasicChainInformation {
 }
 
 interface ExtendedChainInformation extends BasicChainInformation {
-  nativeCurrency: AddEthereumChainParameter["nativeCurrency"];
-  blockExplorerUrls: AddEthereumChainParameter["blockExplorerUrls"];
+  nativeCurrency: AddEthereumChainParameter['nativeCurrency'];
+  blockExplorerUrls: AddEthereumChainParameter['blockExplorerUrls'];
 }
 
 function isExtendedChainInformation(
@@ -49,119 +49,133 @@ export const CHAINS: {
   1: {
     urls: [
       process.env.infuraKey ? `https://mainnet.infura.io/v3/${process.env.infuraKey}` : undefined,
-      process.env.alchemyKey ? `https://eth-mainnet.alchemyapi.io/v2/${process.env.alchemyKey}` : undefined,
-      "https://cloudflare-eth.com",
+      process.env.alchemyKey
+        ? `https://eth-mainnet.alchemyapi.io/v2/${process.env.alchemyKey}`
+        : undefined,
+      'https://cloudflare-eth.com',
     ].filter((url) => url !== undefined) as string[],
-    name: "Mainnet",
+    name: 'Mainnet',
   },
   3: {
-    urls: [process.env.infuraKey ? `https://ropsten.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
-      (url) => url !== undefined
-    ) as string[],
-    name: "Ropsten",
+    urls: [
+      process.env.infuraKey ? `https://ropsten.infura.io/v3/${process.env.infuraKey}` : undefined,
+    ].filter((url) => url !== undefined) as string[],
+    name: 'Ropsten',
   },
   4: {
-    urls: [process.env.infuraKey ? `https://rinkeby.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
-      (url) => url !== undefined
-    ) as string[],
-    name: "Rinkeby",
+    urls: [
+      process.env.infuraKey ? `https://rinkeby.infura.io/v3/${process.env.infuraKey}` : undefined,
+    ].filter((url) => url !== undefined) as string[],
+    name: 'Rinkeby',
   },
   5: {
-    urls: [process.env.infuraKey ? `https://goerli.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
-      (url) => url !== undefined
-    ) as string[],
-    name: "Görli",
+    urls: [
+      process.env.infuraKey ? `https://goerli.infura.io/v3/${process.env.infuraKey}` : undefined,
+    ].filter((url) => url !== undefined) as string[],
+    name: 'Görli',
   },
   42: {
-    urls: [process.env.infuraKey ? `https://kovan.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
-      (url) => url !== undefined
-    ) as string[],
-    name: "Kovan",
+    urls: [
+      process.env.infuraKey ? `https://kovan.infura.io/v3/${process.env.infuraKey}` : undefined,
+    ].filter((url) => url !== undefined) as string[],
+    name: 'Kovan',
   },
   // Optimism
   10: {
     urls: [
-      process.env.infuraKey ? `https://optimism-mainnet.infura.io/v3/${process.env.infuraKey}` : undefined,
-      "https://mainnet.optimism.io",
+      process.env.infuraKey
+        ? `https://optimism-mainnet.infura.io/v3/${process.env.infuraKey}`
+        : undefined,
+      'https://mainnet.optimism.io',
     ].filter((url) => url !== undefined) as string[],
-    name: "Optimism",
+    name: 'Optimism',
     nativeCurrency: ETH,
-    blockExplorerUrls: ["https://optimistic.etherscan.io"],
+    blockExplorerUrls: ['https://optimistic.etherscan.io'],
   },
   56: {
-    urls: ["https://bsc-dataseed.binance.org/"],
-    name: "Binance",
+    urls: ['https://bsc-dataseed.binance.org/'],
+    name: 'Binance',
     nativeCurrency: {
-      name: "BNB",
+      name: 'BNB',
       decimals: 18,
-      symbol: "BNB",
+      symbol: 'BNB',
     },
   },
   69: {
     urls: [
-      process.env.infuraKey ? `https://optimism-kovan.infura.io/v3/${process.env.infuraKey}` : undefined,
-      "https://kovan.optimism.io",
+      process.env.infuraKey
+        ? `https://optimism-kovan.infura.io/v3/${process.env.infuraKey}`
+        : undefined,
+      'https://kovan.optimism.io',
     ].filter((url) => url !== undefined) as string[],
-    name: "Optimism Kovan",
+    name: 'Optimism Kovan',
     nativeCurrency: ETH,
-    blockExplorerUrls: ["https://kovan-optimistic.etherscan.io"],
+    blockExplorerUrls: ['https://kovan-optimistic.etherscan.io'],
   },
   // Arbitrum
   42161: {
     urls: [
-      process.env.infuraKey ? `https://arbitrum-mainnet.infura.io/v3/${process.env.infuraKey}` : undefined,
-      "https://arb1.arbitrum.io/rpc",
+      process.env.infuraKey
+        ? `https://arbitrum-mainnet.infura.io/v3/${process.env.infuraKey}`
+        : undefined,
+      'https://arb1.arbitrum.io/rpc',
     ].filter((url) => url !== undefined) as string[],
-    name: "Arbitrum One",
+    name: 'Arbitrum One',
     nativeCurrency: ETH,
-    blockExplorerUrls: ["https://arbiscan.io"],
+    blockExplorerUrls: ['https://arbiscan.io'],
   },
   421611: {
     urls: [
-      process.env.infuraKey ? `https://arbitrum-rinkeby.infura.io/v3/${process.env.infuraKey}` : undefined,
-      "https://rinkeby.arbitrum.io/rpc",
+      process.env.infuraKey
+        ? `https://arbitrum-rinkeby.infura.io/v3/${process.env.infuraKey}`
+        : undefined,
+      'https://rinkeby.arbitrum.io/rpc',
     ].filter((url) => url !== undefined) as string[],
-    name: "Arbitrum Testnet",
+    name: 'Arbitrum Testnet',
     nativeCurrency: ETH,
-    blockExplorerUrls: ["https://testnet.arbiscan.io"],
+    blockExplorerUrls: ['https://testnet.arbiscan.io'],
   },
   // Polygon
   137: {
     urls: [
-      process.env.infuraKey ? `https://polygon-mainnet.infura.io/v3/${process.env.infuraKey}` : undefined,
-      "https://polygon-rpc.com",
+      process.env.infuraKey
+        ? `https://polygon-mainnet.infura.io/v3/${process.env.infuraKey}`
+        : undefined,
+      'https://polygon-rpc.com',
     ].filter((url) => url !== undefined) as string[],
-    name: "Polygon Mainnet",
+    name: 'Polygon Mainnet',
     nativeCurrency: MATIC,
-    blockExplorerUrls: ["https://polygonscan.com"],
+    blockExplorerUrls: ['https://polygonscan.com'],
   },
   80001: {
-    urls: [process.env.infuraKey ? `https://polygon-mumbai.infura.io/v3/${process.env.infuraKey}` : undefined].filter(
-      (url) => url !== undefined
-    ) as string[],
-    name: "Polygon Mumbai",
+    urls: [
+      process.env.infuraKey
+        ? `https://polygon-mumbai.infura.io/v3/${process.env.infuraKey}`
+        : undefined,
+    ].filter((url) => url !== undefined) as string[],
+    name: 'Polygon Mumbai',
     nativeCurrency: MATIC,
-    blockExplorerUrls: ["https://mumbai.polygonscan.com"],
+    blockExplorerUrls: ['https://mumbai.polygonscan.com'],
   },
   1001: {
-    urls: ["https://api.baobab.klaytn.net:8651"],
-    name: "Klaytn Baobab",
+    urls: ['https://api.baobab.klaytn.net:8651'],
+    name: 'Klaytn Baobab',
     nativeCurrency: {
-      name: "KLAY",
-      symbol: "KLAY",
+      name: 'KLAY',
+      symbol: 'KLAY',
       decimals: 18,
     },
-    blockExplorerUrls: ["https://baobab.scope.klaytn.com/"],
+    blockExplorerUrls: ['https://baobab.scope.klaytn.com/'],
   },
   8217: {
-    urls: ["https://public-node-api.klaytnapi.com/v1/cypress"],
-    name: "Klaytn Cypress",
+    urls: ['https://public-node-api.klaytnapi.com/v1/cypress'],
+    name: 'Klaytn Cypress',
     nativeCurrency: {
-      name: "KLAY",
-      symbol: "KLAY",
+      name: 'KLAY',
+      symbol: 'KLAY',
       decimals: 18,
     },
-    blockExplorerUrls: ["https://scope.klaytn.com/"],
+    blockExplorerUrls: ['https://scope.klaytn.com/'],
   },
 };
 

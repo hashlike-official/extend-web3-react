@@ -2,13 +2,13 @@
   @typescript-eslint/no-explicit-any,
 */
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from 'react';
 
-import { MetamaskLibrary } from "./library/MetamaskLibrary";
-import { KaikasLibrary } from "./library/KaikasLibrary";
-import { WalletLibrary, WalletType } from "./types/WalletLibrary";
-import { useWeb3Store } from "./store";
-import { kaikasConnector, metamaskHooks } from "./connector";
+import { MetamaskLibrary } from './library/MetamaskLibrary';
+import { KaikasLibrary } from './library/KaikasLibrary';
+import { WalletLibrary, WalletType } from './types/WalletLibrary';
+import { useWeb3Store } from './store';
+import { kaikasConnector, metamaskHooks } from './connector';
 
 export function useProvider(): WalletLibrary<any> | undefined {
   const currentType = useWeb3Store((state) => state.currentType);
@@ -18,12 +18,12 @@ export function useProvider(): WalletLibrary<any> | undefined {
 
   return useMemo(() => {
     switch (currentType) {
-      case "MetaMask":
+      case 'MetaMask':
         if (metamaskOriginProvider) {
           return new MetamaskLibrary(metamaskOriginProvider);
         }
         break;
-      case "Kaikas":
+      case 'Kaikas':
         return new KaikasLibrary(kaikasOriginProvider);
     }
   }, [currentType, metamaskOriginProvider, kaikasOriginProvider]);
@@ -54,7 +54,7 @@ export function InitWalletLib(chainId?: number) {
   const account = useAccount();
 
   useEffect(() => {
-    const walletType = window.localStorage.getItem("walletType");
+    const walletType = window.localStorage.getItem('walletType');
     if (walletType) {
       void connect(walletType as WalletType, chainId);
     }

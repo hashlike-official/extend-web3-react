@@ -1,8 +1,8 @@
-import create from "zustand";
-import { Web3ReactHooks } from "@web3-react/core";
-import { Connector, Web3ReactStore } from "@web3-react/types";
-import { getAddChainParameters } from "./chains";
-import { WalletLibrary, WalletType } from "./types/WalletLibrary";
+import create from 'zustand';
+import { Web3ReactHooks } from '@web3-react/core';
+import { Connector, Web3ReactStore } from '@web3-react/types';
+import { getAddChainParameters } from './chains';
+import { WalletLibrary, WalletType } from './types/WalletLibrary';
 import {
   kaikasConnector,
   kaikasHooks,
@@ -10,7 +10,7 @@ import {
   metamaskConnector,
   metamaskHooks,
   metamaskStore,
-} from "./connector";
+} from './connector';
 
 type WalletLibraryType = {
   connector: Connector;
@@ -31,19 +31,19 @@ export const useWeb3Store = create<WalletLibraryType>((set, get) => ({
   currentType: undefined,
   pending: 0,
   balance: 0,
-  account: "",
+  account: '',
   fetchBalance: async (provider) => {
     const balance = await provider.getBalanceOf(get().account);
     set({ balance: Number(balance) });
   },
   connect: async (type, chainId?) => {
-    window.localStorage.removeItem("walletType");
+    window.localStorage.removeItem('walletType');
     void get().connector.deactivate();
     set({ currentType: type });
-    window.localStorage.setItem("walletType", type);
+    window.localStorage.setItem('walletType', type);
 
     switch (type) {
-      case "MetaMask":
+      case 'MetaMask':
         await metamaskConnector.activate(chainId ? getAddChainParameters(chainId) : undefined);
         set({
           connector: metamaskConnector,
@@ -51,7 +51,7 @@ export const useWeb3Store = create<WalletLibraryType>((set, get) => ({
           store: metamaskStore,
         });
         break;
-      case "Kaikas":
+      case 'Kaikas':
         await kaikasConnector.activate(chainId);
         set({
           connector: kaikasConnector,

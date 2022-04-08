@@ -1,2 +1,2 @@
-export * from "./MetamaskContract";
-export * from "./KaikasContract";
+export * from './MetamaskContract';
+export * from './KaikasContract';
