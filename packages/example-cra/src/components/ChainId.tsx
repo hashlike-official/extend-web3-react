@@ -1,5 +1,5 @@
-import { CHAINS } from "@hashlike-official/extend-web3-react-wrapper";
-import { useChain } from "../utils";
+import { CHAINS } from '@hashlike-official/extend-web3-react-wrapper';
+import { useChain } from '../utils';
 
 export default function Chain() {
   const chainId = useChain();
@@ -8,7 +8,7 @@ export default function Chain() {
   if (name) {
     return (
       <div>
-        Chain:{" "}
+        Chain:{' '}
         <b>
           {name} ({chainId})
         </b>

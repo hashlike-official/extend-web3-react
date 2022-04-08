@@ -1,9 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { formatUnits, useProvider, useWeb3Store } from "@hashlike-official/extend-web3-react-wrapper";
-import deployedABI from "../../deployedABI.json";
-import { callWithPending, useChain } from "../utils";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  formatUnits,
+  useProvider,
+  useWeb3Store,
+} from '@hashlike-official/extend-web3-react-wrapper';
+import deployedABI from '../../deployedABI.json';
+import { callWithPending, useChain } from '../utils';
 
-const deployedAddress = "0xb4bF60383C64D47F2E667f2fE8F7ED0c9380f770";
+const deployedAddress = '0xb4bF60383C64D47F2E667f2fE8F7ED0c9380f770';
 
 function useCountContract() {
   const provider = useProvider();
@@ -22,9 +26,9 @@ export default function Count() {
 
   const getCount = useCallback(async () => {
     if (contract) {
-      const count = await contract.call({ methodName: "count" });
-      if (typeof count === "object") {
-        const formated = formatUnits(count, "wei");
+      const count = await contract.call({ methodName: 'count' });
+      if (typeof count === 'object') {
+        const formated = formatUnits(count, 'wei');
         setCount(Number(formated));
       } else {
         setCount(count);
@@ -36,7 +40,7 @@ export default function Count() {
     if (contract) {
       const result = await callWithPending(
         contract.send({
-          methodName: "plus",
+          methodName: 'plus',
         })
       );
       console.log(result);
@@ -47,7 +51,7 @@ export default function Count() {
     if (contract) {
       const result = await callWithPending(
         contract.send({
-          methodName: "minus",
+          methodName: 'minus',
         })
       );
       console.log(result);

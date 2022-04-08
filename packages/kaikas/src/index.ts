@@ -4,9 +4,9 @@
   @typescript-eslint/no-unsafe-argument
 */
 
-import type { Actions, AddEthereumChainParameter, Provider } from "@web3-react/types";
-import { Connector } from "@web3-react/types";
-import Caver, { AbiItem, Contract } from "caver-js";
+import type { Actions, AddEthereumChainParameter, Provider } from '@web3-react/types';
+import { Connector } from '@web3-react/types';
+import Caver, { AbiItem, Contract } from 'caver-js';
 
 export { Caver, AbiItem, Contract };
 
@@ -28,7 +28,7 @@ type KaikasProvider = Provider & {
 
 export class NoKaikasError extends Error {
   public constructor() {
-    super("Kaikas not installed");
+    super('Kaikas not installed');
     this.name = NoKaikasError.name;
     Object.setPrototypeOf(this, NoKaikasError.prototype);
   }
@@ -45,15 +45,17 @@ export class Kaikas extends Connector {
   constructor(actions: Actions, connectEagerly = false) {
     super(actions);
 
-    if (connectEagerly && typeof window === "undefined") {
-      throw new Error("connectEagerly = true is invalid for SSR, instead use the connectEagerly method in a useEffect");
+    if (connectEagerly && typeof window === 'undefined') {
+      throw new Error(
+        'connectEagerly = true is invalid for SSR, instead use the connectEagerly method in a useEffect'
+      );
     }
 
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
 
-    if (typeof window.klaytn === "undefined") {
+    if (typeof window.klaytn === 'undefined') {
       this.actions.reportError(new NoKaikasError());
     } else {
       this.provider = window.klaytn as KaikasProvider;
@@ -68,11 +70,11 @@ export class Kaikas extends Connector {
 
     if (!this.provider || !this.provider.isKaikas) return cancelActivation();
 
-    this.provider.on("networkChanged", () => {
+    this.provider.on('networkChanged', () => {
       this.actions.update({ chainId: Number(this.provider!.networkVersion) });
     });
 
-    this.provider.on("accountsChanged", (accounts: string[]): void => {
+    this.provider.on('accountsChanged', (accounts: string[]): void => {
       if (accounts.length === 0) {
         this.actions.reportError(undefined);
       } else {
@@ -88,11 +90,11 @@ export class Kaikas extends Connector {
             accounts: accounts[0],
           });
         } else {
-          throw new Error("No accounts returned");
+          throw new Error('No accounts returned');
         }
       })
       .catch((error) => {
-        console.debug("Could not connect eagerly", error);
+        console.debug('Could not connect eagerly', error);
         cancelActivation();
       });
   }
@@ -106,7 +108,9 @@ export class Kaikas extends Connector {
    * argument is of type AddEthereumChainParameter, in which case the user will be prompted to add the chain with the
    * specified parameters first, before being prompted to switch.
    */
-  public async activate(desiredChainIdOrChainParameters?: number | AddEthereumChainParameter): Promise<void> {
+  public async activate(
+    desiredChainIdOrChainParameters?: number | AddEthereumChainParameter
+  ): Promise<void> {
     if (!this.provider) return this.actions.reportError(new NoKaikasError());
 
     if (!this.provider._kaikas.isEnabled()) this.actions.startActivation();
@@ -115,7 +119,7 @@ export class Kaikas extends Connector {
       .then((accounts) => {
         const receivedChainId = Number(this.provider!.networkVersion);
         const desiredChainId =
-          typeof desiredChainIdOrChainParameters === "number"
+          typeof desiredChainIdOrChainParameters === 'number'
             ? desiredChainIdOrChainParameters
             : desiredChainIdOrChainParameters?.chainId;
 
@@ -125,7 +129,9 @@ export class Kaikas extends Connector {
             accounts: accounts[0],
           });
         } else {
-          throw Error(`can't switch to chain ID: ${desiredChainId}. please manually switch network...`);
+          throw Error(
+            `can't switch to chain ID: ${desiredChainId}. please manually switch network...`
+          );
         }
       })
       .catch((e) => {

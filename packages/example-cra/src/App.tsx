@@ -1,12 +1,12 @@
-import { InitWalletLib, useWeb3Store } from "@hashlike-official/extend-web3-react-wrapper";
-import { useEffect } from "react";
-import "./App.css";
-import BlockNumber from "./components/BlockNumber";
-import Count from "./components/Count";
-import CurrentWallet from "./components/CurrentWallet";
-import Pending from "./components/Pending";
-import Transfer from "./components/Transfer";
-import WalletConnector from "./components/WalletConnector";
+import { InitWalletLib, useWeb3Store } from '@hashlike-official/extend-web3-react-wrapper';
+import { useEffect } from 'react';
+import './App.css';
+import BlockNumber from './components/BlockNumber';
+import Count from './components/Count';
+import CurrentWallet from './components/CurrentWallet';
+import Pending from './components/Pending';
+import Transfer from './components/Transfer';
+import WalletConnector from './components/WalletConnector';
 
 function App() {
   InitWalletLib();
@@ -17,12 +17,12 @@ function App() {
     if (err) {
       console.error(err);
       if (err instanceof Error) {
-        if (err.name === "NoKaikasError") {
-          alert("Kaikas 지갑이 없습니다.");
-        } else if (err.name === "NoMetaMaskError") {
-          alert("Metamask 지갑이 없습니다.");
+        if (err.name === 'NoKaikasError') {
+          alert('Kaikas 지갑이 없습니다.');
+        } else if (err.name === 'NoMetaMaskError') {
+          alert('Metamask 지갑이 없습니다.');
         }
-        localStorage.removeItem("walletType");
+        localStorage.removeItem('walletType');
       }
     }
   }, [err]);

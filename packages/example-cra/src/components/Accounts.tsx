@@ -1,4 +1,4 @@
-import { useWeb3Store } from "@hashlike-official/extend-web3-react-wrapper";
+import { useWeb3Store } from '@hashlike-official/extend-web3-react-wrapper';
 
 export default function Accounts() {
   const account = useWeb3Store((state) => state.account);
@@ -6,13 +6,13 @@ export default function Accounts() {
 
   return (
     <div>
-      Account:{" "}
+      Account:{' '}
       <b>
         <div
           style={{
             margin: 0,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
           {account}
