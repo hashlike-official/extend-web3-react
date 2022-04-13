@@ -26,7 +26,7 @@ export class MetamaskContract extends WrappedContract<Contract> {
     }
   };
 
-  send = async ({ methodName, params = [], option }: SendParamType) => {
+  send = async ({ methodName, params = [], option, callback }: SendParamType) => {
     if (!this.originContract[methodName]) {
       throw Error('Not Exist Method');
     }
@@ -43,8 +43,10 @@ export class MetamaskContract extends WrappedContract<Contract> {
     const result = await this.originContract[methodName](...params, {
       ...option,
     });
+    if (callback?.onTransactionHash) {
+      callback.onTransactionHash(result.hash);
+    }
     const receipt = await result.wait();
-
     return receipt;
   };
 }

@@ -22,6 +22,8 @@ function useCountContract() {
 export default function Count() {
   const contract = useCountContract();
   const [count, setCount] = useState(0);
+  const [transactionHash, setTransactionHash] = useState<string | undefined>();
+
   const chainId = useChain();
 
   const getCount = useCallback(async () => {
@@ -41,9 +43,15 @@ export default function Count() {
       const result = await callWithPending(
         contract.send({
           methodName: 'plus',
+          callback: {
+            onTransactionHash: (hash) => {
+              setTransactionHash(hash);
+            },
+          },
         })
       );
       console.log(result);
+      setTransactionHash(undefined);
     }
   }, [contract]);
 
@@ -70,6 +78,7 @@ export default function Count() {
       <h1>count: {count}</h1>
       <button onClick={() => plusCount()}>plus</button>
       <button onClick={() => minusCount()}>minus</button>
+      {transactionHash && <h4>{transactionHash}</h4>}
       {chainId !== 1001 && <h4>This exam need to connect Klaytn Baobab network</h4>}
     </>
   );

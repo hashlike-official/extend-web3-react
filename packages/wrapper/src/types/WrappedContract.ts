@@ -2,6 +2,10 @@
   @typescript-eslint/no-explicit-any,
 */
 
+type CallbackType = {
+  onTransactionHash?: (hash: string) => void;
+};
+
 export type CallParamType = {
   methodName: string;
   params?: any[];
@@ -21,6 +25,7 @@ export type SendParamType = {
     gasPrice?: any;
     value?: any;
   };
+  callback?: CallbackType;
 };
 
 export abstract class WrappedContract<T> {

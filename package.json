@@ -6,6 +6,7 @@
     "clean": "lerna clean --yes",
     "test": "jest",
     "build": "lerna run build",
+    "start": "lerna run start --parallel",
     "dev": "lerna run dev --parallel"
   },
   "workspaces": [

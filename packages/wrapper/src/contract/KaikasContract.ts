@@ -23,7 +23,7 @@ export class KaikasContract extends WrappedContract<Contract> {
     }
   };
 
-  send = async ({ methodName, params = [], option }: SendParamType) => {
+  send = async ({ methodName, params = [], option, callback }: SendParamType) => {
     if (!this.originContract.methods[methodName]) {
       throw Error('Not Exist Method');
     }
@@ -35,12 +35,19 @@ export class KaikasContract extends WrappedContract<Contract> {
     } else {
       gas = option.gasLimit;
     }
-    console.log(gas);
 
-    const result = await this.originContract.methods[methodName](...params).send({
-      ...option,
-      gas,
-    });
+    const result = await this.originContract.methods[methodName](...params).send(
+      {
+        ...option,
+        gas,
+      },
+      (err: any, txHash: string) => {
+        console.log('tx', txHash);
+        if (callback?.onTransactionHash) {
+          callback.onTransactionHash(txHash);
+        }
+      }
+    );
     return result;
   };
 }
