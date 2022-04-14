@@ -2,7 +2,7 @@
   "private": true,
   "name": "example-cra",
   "dependencies": {
-    "@hashlike-official/extend-web3-react-wrapper": "^1.0.8",
+    "@hashlike-official/extend-web3-react-wrapper": "^1.0.9",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
