@@ -38,4 +38,6 @@ export abstract class WrappedContract<T> {
   abstract call(params: CallParamType): Promise<any>;
 
   abstract send(params: SendParamType): Promise<any>;
+
+  abstract estimateGas(params: SendParamType): Promise<any>;
 }

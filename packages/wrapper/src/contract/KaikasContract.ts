@@ -9,7 +9,7 @@ import { CallParamType, SendParamType, WrappedContract } from '../types/WrappedC
 import { Contract } from '@hashlike-official/extend-web3-react-kaikas';
 
 export class KaikasContract extends WrappedContract<Contract> {
-  call = async ({ methodName, params = [], option }: CallParamType) => {
+  public async call({ methodName, params = [], option }: CallParamType) {
     if (!this.originContract.methods[methodName]) {
       throw Error('Not Exist Method');
     }
@@ -21,19 +21,18 @@ export class KaikasContract extends WrappedContract<Contract> {
         throw e;
       }
     }
-  };
+  }
 
-  send = async ({ methodName, params = [], option, callback }: SendParamType) => {
+  public async send({ methodName, params = [], option, callback }: SendParamType) {
     if (!this.originContract.methods[methodName]) {
       throw Error('Not Exist Method');
     }
     let gas;
-    if (!option?.gasLimit) {
-      gas = await this.originContract.methods[methodName](...params).estimateGas({
-        ...option,
-      });
-    } else {
+    if (option?.gasLimit) {
       gas = option.gasLimit;
+    } else {
+      const estimation = await this.estimateGas({ methodName, params, option });
+      gas = Number((estimation * 1.2).toFixed(0));
     }
 
     const result = await this.originContract.methods[methodName](...params).send(
@@ -42,12 +41,18 @@ export class KaikasContract extends WrappedContract<Contract> {
         gas,
       },
       (err: any, txHash: string) => {
-        console.log('tx', txHash);
         if (callback?.onTransactionHash) {
           callback.onTransactionHash(txHash);
         }
       }
     );
     return result;
-  };
+  }
+
+  public async estimateGas({ methodName, params = [], option }: SendParamType) {
+    const estimation = await this.originContract.methods[methodName](...params).estimateGas({
+      ...option,
+    });
+    return estimation;
+  }
 }

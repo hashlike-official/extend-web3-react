@@ -7,10 +7,11 @@
   @typescript-eslint/no-explicit-any,
 */
 import { Contract } from '@ethersproject/contracts';
+import { formatEther, parseEther } from '@ethersproject/units';
 import { CallParamType, SendParamType, WrappedContract } from '../types/WrappedContract';
 
 export class MetamaskContract extends WrappedContract<Contract> {
-  call = async ({ methodName, params = [], option }: CallParamType) => {
+  public async call({ methodName, params = [], option }: CallParamType) {
     if (!this.originContract.functions[methodName]) {
       throw Error('Not Exist Method');
     }
@@ -24,9 +25,9 @@ export class MetamaskContract extends WrappedContract<Contract> {
         throw e;
       }
     }
-  };
+  }
 
-  send = async ({ methodName, params = [], option, callback }: SendParamType) => {
+  public async send({ methodName, params = [], option, callback }: SendParamType) {
     if (!this.originContract[methodName]) {
       throw Error('Not Exist Method');
     }
@@ -37,7 +38,8 @@ export class MetamaskContract extends WrappedContract<Contract> {
       option.gasPrice = await this.originContract.provider.getGasPrice();
     }
     if (!option.gasLimit) {
-      option.gasLimit = await this.originContract.estimateGas[methodName](...params, { ...option });
+      const estimation = await this.estimateGas({ methodName, params, option });
+      option.gasLimit = parseEther((Number(estimation) * 1.2).toFixed(18));
     }
 
     const result = await this.originContract[methodName](...params, {
@@ -48,5 +50,10 @@ export class MetamaskContract extends WrappedContract<Contract> {
     }
     const receipt = await result.wait();
     return receipt;
-  };
+  }
+
+  public async estimateGas({ methodName, params = [], option }: SendParamType) {
+    const estimation = await this.originContract.estimateGas[methodName](...params, { ...option });
+    return formatEther(estimation);
+  }
 }
