@@ -12,7 +12,7 @@ import {
   metamaskStore,
 } from './connector';
 
-type WalletLibraryType = {
+export type WalletLibraryType = {
   connector: Connector;
   hooks: Web3ReactHooks;
   store: Web3ReactStore;
