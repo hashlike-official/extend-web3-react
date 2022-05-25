@@ -1,4 +1,4 @@
-import { InitWalletLib, useWeb3Store } from '@hashlike-official/extend-web3-react-wrapper';
+import { useInitWallet, useWeb3Store } from '@hashlike-official/extend-web3-react-wrapper';
 import { useEffect } from 'react';
 import './App.css';
 import BlockNumber from './components/BlockNumber';
@@ -9,9 +9,13 @@ import Transfer from './components/Transfer';
 import WalletConnector from './components/WalletConnector';
 
 function App() {
-  InitWalletLib();
+  const initWallet = useInitWallet();
   const { useError } = useWeb3Store((state) => state.hooks);
   const err = useError();
+
+  useEffect(() => {
+    initWallet(1001);
+  }, []);
 
   useEffect(() => {
     if (err) {
