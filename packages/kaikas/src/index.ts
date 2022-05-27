@@ -70,17 +70,7 @@ export class Kaikas extends Connector {
 
     if (!this.provider || !this.provider.isKaikas) return cancelActivation();
 
-    this.provider.on('networkChanged', () => {
-      this.actions.update({ chainId: Number(this.provider!.networkVersion) });
-    });
-
-    this.provider.on('accountsChanged', (accounts: string[]): void => {
-      if (accounts.length === 0) {
-        this.actions.reportError(undefined);
-      } else {
-        this.actions.update({ accounts });
-      }
-    });
+    this.setChangeEventListener();
 
     return Promise.all([this.provider.enable()])
       .then((accounts) => {
@@ -115,6 +105,8 @@ export class Kaikas extends Connector {
 
     if (!this.provider._kaikas.isEnabled()) this.actions.startActivation();
 
+    this.setChangeEventListener();
+
     return Promise.all([this.provider.enable()])
       .then((accounts) => {
         const receivedChainId = Number(this.provider!.networkVersion);
@@ -139,5 +131,21 @@ export class Kaikas extends Connector {
           this.actions.reportError(e);
         }
       });
+  }
+
+  private setChangeEventListener() {
+    if (!this.provider) return;
+
+    this.provider.on('networkChanged', () => {
+      this.actions.update({ chainId: Number(this.provider!.networkVersion) });
+    });
+
+    this.provider.on('accountsChanged', (accounts: string[]): void => {
+      if (accounts.length === 0) {
+        this.actions.reportError(undefined);
+      } else {
+        this.actions.update({ accounts });
+      }
+    });
   }
 }
