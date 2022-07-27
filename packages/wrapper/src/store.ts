@@ -28,8 +28,10 @@ export type WalletLibraryStore = {
   pending: number;
   balance: number;
   account: string;
+  error: Error | undefined;
   connect: (type: WalletType, chainId?: number) => Promise<void>;
   fetchBalance: (provider: WalletLibrary<SupportedProvider>) => Promise<void>;
+  setError: (err: Error) => void;
 };
 
 export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
@@ -40,6 +42,7 @@ export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
   pending: 0,
   balance: 0,
   account: '',
+  error: undefined,
   fetchBalance: async (provider) => {
     const balance = await provider.getBalanceOf(get().account);
     set({ balance: Number(balance) });
@@ -71,5 +74,8 @@ export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
         });
         break;
     }
+  },
+  setError(error) {
+    set(() => ({ error }));
   },
 }));
