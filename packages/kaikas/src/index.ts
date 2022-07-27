@@ -55,7 +55,7 @@ export class Kaikas extends Connector {
   constructor(actions: Actions, onError?: (error: Error) => void) {
     super(actions, onError);
 
-    if (typeof window.klaytn === 'undefined') {
+    if (typeof window === 'undefined' || typeof window.klaytn === 'undefined') {
       this.onError?.(new NoKaikasError());
     } else {
       this.provider = window.klaytn;
