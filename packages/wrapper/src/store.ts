@@ -46,7 +46,10 @@ export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
   },
   connect: async (type, chainId?) => {
     window.localStorage.removeItem('walletType');
-    void get().connector.deactivate();
+    const connector = get().connector;
+    void connector.deactivate?.();
+    connector.resetState();
+
     set({ currentType: type });
     window.localStorage.setItem('walletType', type);
 
