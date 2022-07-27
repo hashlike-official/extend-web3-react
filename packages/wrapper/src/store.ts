@@ -50,28 +50,37 @@ export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
   connect: async (type, chainId?) => {
     window.localStorage.removeItem('walletType');
     const connector = get().connector;
-    void connector.deactivate?.();
-    connector.resetState();
+    await connector.deactivate?.();
+    await connector.resetState();
 
     set({ currentType: type });
     window.localStorage.setItem('walletType', type);
 
     switch (type) {
       case 'MetaMask':
-        await metamaskConnector.activate(chainId ? getAddChainParameters(chainId) : undefined);
-        set({
-          connector: metamaskConnector,
-          hooks: metamaskHooks,
-          store: metamaskStore,
-        });
+        try {
+          await metamaskConnector.activate(chainId ? getAddChainParameters(chainId) : undefined);
+          set({
+            connector: metamaskConnector,
+            hooks: metamaskHooks,
+            store: metamaskStore,
+          });
+        } catch (err) {
+          if (err instanceof Error) get().setError(err);
+        }
+
         break;
       case 'Kaikas':
-        await kaikasConnector.activate(chainId);
-        set({
-          connector: kaikasConnector,
-          hooks: kaikasHooks,
-          store: kaikasStore,
-        });
+        try {
+          await kaikasConnector.activate(chainId);
+          set({
+            connector: kaikasConnector,
+            hooks: kaikasHooks,
+            store: kaikasStore,
+          });
+        } catch (err) {
+          if (err instanceof Error) get().setError(err);
+        }
         break;
     }
   },

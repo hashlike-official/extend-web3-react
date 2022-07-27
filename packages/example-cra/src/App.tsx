@@ -10,25 +10,24 @@ import WalletConnector from './components/WalletConnector';
 
 function App() {
   const initWallet = useInitWallet();
-  const setError = useWeb3Store((state) => state.setError);
+  const err = useWeb3Store((state) => state.error);
 
   useEffect(() => {
-    try {
-      initWallet(1001);
-    } catch (err) {
-      console.error(err);
-      if (err instanceof Error) {
-        setError(err);
-        if (err.name === 'NoKaikasError') {
-          alert('Kaikas 지갑이 없습니다.');
-        } else if (err.name === 'NoMetaMaskError') {
-          alert('Metamask 지갑이 없습니다.');
-        }
-        localStorage.removeItem('walletType');
-      }
-    }
+    initWallet(1001);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.error(err);
+    if (err instanceof Error) {
+      if (err.name === 'NoKaikasError') {
+        alert('Kaikas 지갑이 없습니다.');
+      } else if (err.name === 'NoMetaMaskError') {
+        alert('Metamask 지갑이 없습니다.');
+      }
+      localStorage.removeItem('walletType');
+    }
+  }, [err]);
 
   return (
     <main>
