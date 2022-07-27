@@ -70,7 +70,7 @@ export default function MyComponent() {
   };
   // ...
   ```
-- InitWalletLib : connect function stores wallet type which currently connected in localStorage. using this hook, you can initialize account, balance with wallet type which stored in localStorage. and can use this hook with specific chainId.(but it doesn't work with kaikas)
+- InitWalletLib : using this hook, you can initialize account, balance with specipic wallet type which stored in localStorage. and can use this hook with specific chainId.(but it doesn't work with kaikas)
   ```typescript
   function App() {
     InitWalletLib(1001);
