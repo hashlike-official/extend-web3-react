@@ -2,7 +2,7 @@
 
 ## example
 
-```
+```typescript
 import { initializeConnector } from "@web3-react/core";
 import { Kaikas } from "@extend-web3-react/kaikas";
 

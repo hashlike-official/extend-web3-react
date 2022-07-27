@@ -28,10 +28,10 @@ export type SendParamType = {
   callback?: CallbackType;
 };
 
-export abstract class WrappedContract<T> {
-  protected readonly originContract: T;
+export abstract class WrappedContract<SupportedContract> {
+  protected readonly originContract: SupportedContract;
 
-  constructor(originContract: T) {
+  constructor(originContract: SupportedContract) {
     this.originContract = originContract;
   }
 

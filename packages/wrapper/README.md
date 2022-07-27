@@ -14,10 +14,13 @@ Just implement abstract classes under src/types folder.
 Look packages/example-cra  
 
 ### state management
+
 using zustand, manage states below:
+
 - states from web3-react
 - currently connected wallet, account, balance  
 - functions that can change states
+
 ```typescript
 type WalletType = "MetaMask" | "Kaikas";
 
@@ -34,7 +37,9 @@ type WalletLibraryType = {
 };
 
 ```  
+
 you can get state inside react components like this:
+
 ```typescript
 import { useWeb3Store } from "@hashlike-official/extend-web3-react-wrapper";
 
@@ -46,7 +51,9 @@ export default function MyComponent() {
 ```
 
 ### hooks
+
 - useProvider : it return connected wallet's provider like Web3Provider(@ethersproject/providers), Caver(caver-js)
+
   ```typescript
   const provider = useProvider();
   // ...
@@ -58,7 +65,9 @@ export default function MyComponent() {
   }, [provider]);
   // ...
   ```
+
 - useTransfer : it return function which can submits transaction to the network to be mined.
+
   ```typescript
   const transfer = useTransfer();
   const account = useWeb3Store((state) => state.account);
@@ -70,7 +79,9 @@ export default function MyComponent() {
   };
   // ...
   ```
+
 - InitWalletLib : using this hook, you can initialize account, balance with specipic wallet type which stored in localStorage. and can use this hook with specific chainId.(but it doesn't work with kaikas)
+
   ```typescript
   function App() {
     InitWalletLib(1001);

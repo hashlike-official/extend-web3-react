@@ -1,18 +1,12 @@
-/* eslint-disable 
-  @typescript-eslint/no-explicit-any,
-  @typescript-eslint/no-non-null-assertion,
-  @typescript-eslint/no-unsafe-argument
-*/
-
 import type { Actions, AddEthereumChainParameter, Provider } from '@web3-react/types';
 import { Connector } from '@web3-react/types';
-import Caver, { AbiItem, Contract } from 'caver-js';
+import Caver, { AbiItem, Contract, RequestProvider } from 'caver-js';
 
 export { Caver, AbiItem, Contract };
 
 declare global {
   interface Window {
-    klaytn: any;
+    klaytn: KaikasProvider & RequestProvider;
   }
 }
 
@@ -58,8 +52,8 @@ export class Kaikas extends Connector {
     if (typeof window.klaytn === 'undefined') {
       this.actions.reportError(new NoKaikasError());
     } else {
-      this.provider = window.klaytn as KaikasProvider;
-      this.customProvider = new Caver(window.klaytn);
+      this.provider = window.klaytn;
+      this.customProvider = new Caver(window.klaytn as RequestProvider);
       if (connectEagerly) void this.connectEagerly();
     }
   }
@@ -72,21 +66,20 @@ export class Kaikas extends Connector {
 
     this.setChangeEventListener();
 
-    return Promise.all([this.provider.enable()])
-      .then((accounts) => {
-        if (accounts.length) {
-          this.actions.update({
-            chainId: Number(this.provider!.networkVersion),
-            accounts: accounts[0],
-          });
-        } else {
-          throw new Error('No accounts returned');
-        }
-      })
-      .catch((error) => {
-        console.debug('Could not connect eagerly', error);
-        cancelActivation();
-      });
+    try {
+      const accounts = await Promise.all([this.provider.enable()]);
+      if (accounts.length) {
+        this.actions.update({
+          chainId: Number(this.provider.networkVersion),
+          accounts: accounts[0],
+        });
+      } else {
+        throw new Error('No accounts returned');
+      }
+    } catch (error) {
+      console.debug('Could not connect eagerly', error);
+      cancelActivation();
+    }
   }
 
   /**
@@ -107,37 +100,36 @@ export class Kaikas extends Connector {
 
     this.setChangeEventListener();
 
-    return Promise.all([this.provider.enable()])
-      .then((accounts) => {
-        const receivedChainId = Number(this.provider!.networkVersion);
-        const desiredChainId =
-          typeof desiredChainIdOrChainParameters === 'number'
-            ? desiredChainIdOrChainParameters
-            : desiredChainIdOrChainParameters?.chainId;
+    try {
+      const accounts = await Promise.all([this.provider.enable()]);
+      const receivedChainId = Number(this.provider.networkVersion);
+      const desiredChainId =
+        typeof desiredChainIdOrChainParameters === 'number'
+          ? desiredChainIdOrChainParameters
+          : desiredChainIdOrChainParameters?.chainId;
 
-        if (!desiredChainId || receivedChainId === desiredChainId) {
-          return this.actions.update({
-            chainId: receivedChainId,
-            accounts: accounts[0],
-          });
-        } else {
-          throw Error(
-            `can't switch to chain ID: ${desiredChainId}. please manually switch network...`
-          );
-        }
-      })
-      .catch((e) => {
-        if (e instanceof Error) {
-          this.actions.reportError(e);
-        }
-      });
+      if (!desiredChainId || receivedChainId === desiredChainId) {
+        return this.actions.update({
+          chainId: receivedChainId,
+          accounts: accounts[0],
+        });
+      } else {
+        throw Error(
+          `can't switch to chain ID: ${desiredChainId}. please manually switch network...`
+        );
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        this.actions.reportError(error);
+      }
+    }
   }
 
   private setChangeEventListener() {
     if (!this.provider) return;
 
     this.provider.on('networkChanged', () => {
-      this.actions.update({ chainId: Number(this.provider!.networkVersion) });
+      this.actions.update({ chainId: Number(this.provider?.networkVersion) });
     });
 
     this.provider.on('accountsChanged', (accounts: string[]): void => {

@@ -15,6 +15,7 @@ function App() {
 
   useEffect(() => {
     initWallet(1001);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

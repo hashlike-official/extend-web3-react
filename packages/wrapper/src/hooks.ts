@@ -6,11 +6,12 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { MetamaskLibrary } from './library/MetamaskLibrary';
 import { KaikasLibrary } from './library/KaikasLibrary';
-import { WalletLibrary, WalletType } from './types/WalletLibrary';
+import { WalletLibrary } from './types/WalletLibrary';
 import { useWeb3Store } from './store';
 import { kaikasConnector, metamaskHooks } from './connector';
+import { SupportedProvider, WalletType } from './types';
 
-export function useProvider(): WalletLibrary<any> | undefined {
+export function useProvider(): WalletLibrary<SupportedProvider> | undefined {
   const currentType = useWeb3Store((state) => state.currentType);
   const metamaskOriginProvider = metamaskHooks.useProvider();
   // eslint-disable-next-line

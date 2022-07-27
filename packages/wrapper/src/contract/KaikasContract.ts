@@ -1,20 +1,33 @@
-/* eslint-disable 
-  @typescript-eslint/no-unsafe-member-access, 
-  @typescript-eslint/no-unsafe-assignment, 
-  @typescript-eslint/no-unsafe-call, 
+/* eslint-disable
+  @typescript-eslint/no-unsafe-member-access,
+  @typescript-eslint/no-unsafe-assignment,
+  @typescript-eslint/no-unsafe-call,
   @typescript-eslint/no-unsafe-return,
   @typescript-eslint/no-explicit-any
 */
 import { CallParamType, SendParamType, WrappedContract } from '../types/WrappedContract';
 import { Contract } from '@hashlike-official/extend-web3-react-kaikas';
 
+/**
+ *
+ * {@link https://docs.klaytn.foundation/dapp/sdk/caver-js/v1.4.1/api-references/caver.klay.contract}
+ *
+ */
 export class KaikasContract extends WrappedContract<Contract> {
-  public async call({ methodName, params = [], option }: CallParamType) {
+  constructor(originContract: Contract) {
+    super(originContract);
+  }
+
+  public async call({ methodName, params = [], option = {} }: CallParamType) {
     if (!this.originContract.methods[methodName]) {
       throw Error('Not Exist Method');
     }
+    const opt = this.parseOption({ option });
+    if (!opt.gas) {
+      opt.gas = await this.estimateGas({ methodName, params, option });
+    }
     try {
-      const result = await this.originContract.methods[methodName](...params).call({ ...option });
+      const result = await this.originContract.methods[methodName](...params).call(opt);
       return result;
     } catch (e) {
       if (e instanceof Error) {
@@ -23,36 +36,44 @@ export class KaikasContract extends WrappedContract<Contract> {
     }
   }
 
-  public async send({ methodName, params = [], option, callback }: SendParamType) {
+  public async send({ methodName, params = [], option = {}, callback }: SendParamType) {
     if (!this.originContract.methods[methodName]) {
       throw Error('Not Exist Method');
     }
-    let gas;
-    if (option?.gasLimit) {
-      gas = option.gasLimit;
-    } else {
-      const estimation = await this.estimateGas({ methodName, params, option });
-      gas = Number((estimation * 1.2).toFixed(0));
+    const opt = this.parseOption({ option });
+    if (!opt.gas) {
+      opt.gas = await this.estimateGas({ methodName, params, option });
     }
-
     const result = await this.originContract.methods[methodName](...params).send(
-      {
-        ...option,
-        gas,
-      },
-      (err: any, txHash: string) => {
-        if (callback?.onTransactionHash) {
-          callback.onTransactionHash(txHash);
+      opt,
+      (err: Error, txHash: string) => {
+        callback?.onTransactionHash?.(txHash);
+        if (err) {
+          console.error(err);
+          throw err;
         }
       }
     );
     return result;
   }
 
-  public async estimateGas({ methodName, params = [], option }: SendParamType) {
+  public async estimateGas({ methodName, params = [], option = {} }: SendParamType) {
     const estimation = await this.originContract.methods[methodName](...params).estimateGas({
-      ...option,
+      ...this.parseOption({ option }),
     });
     return estimation;
+  }
+
+  private parseOption({ option }: Partial<SendParamType>) {
+    let opt: any = {};
+    if (option) {
+      opt = {
+        ...option,
+      };
+      if (option.gasLimit) {
+        opt['gas'] = option.gasLimit;
+      }
+    }
+    return opt;
   }
 }

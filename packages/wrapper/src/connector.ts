@@ -1,3 +1,9 @@
+/* eslint-disable
+  @typescript-eslint/no-unsafe-assignment,
+  @typescript-eslint/no-unsafe-call,
+  @typescript-eslint/no-unsafe-return,
+*/
+
 import { initializeConnector } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
 import { Kaikas } from '@hashlike-official/extend-web3-react-kaikas';

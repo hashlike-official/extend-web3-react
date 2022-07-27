@@ -2,14 +2,13 @@
   @typescript-eslint/no-explicit-any,
 */
 
+import { SupportedContract } from '.';
 import { WrappedContract } from './WrappedContract';
 
-export type WalletType = 'MetaMask' | 'Kaikas';
+export abstract class WalletLibrary<SupportedProvider> {
+  protected readonly provider: SupportedProvider;
 
-export abstract class WalletLibrary<T> {
-  protected readonly provider: T;
-
-  constructor(provider: T) {
+  constructor(provider: SupportedProvider) {
     this.provider = provider;
   }
 
@@ -19,5 +18,9 @@ export abstract class WalletLibrary<T> {
 
   abstract transfer(from: string, to: string, value: number): Promise<boolean>;
 
-  abstract contract(jsonInterface: any, address: string, account?: string): WrappedContract<any>;
+  abstract contract(
+    jsonInterface: any,
+    address: string,
+    account?: string
+  ): WrappedContract<SupportedContract>;
 }

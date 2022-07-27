@@ -1,8 +1,16 @@
+/* eslint-disable
+  @typescript-eslint/no-unsafe-assignment,
+  @typescript-eslint/no-unsafe-call,
+  @typescript-eslint/no-unsafe-member-access,
+*/
+
 import create from 'zustand';
 import { Web3ReactHooks } from '@web3-react/core';
 import { Connector, Web3ReactStore } from '@web3-react/types';
 import { getAddChainParameters } from './chains';
-import { WalletLibrary, WalletType } from './types/WalletLibrary';
+import { WalletLibrary } from './types/WalletLibrary';
+import { SupportedProvider, WalletType } from './types';
+
 import {
   kaikasConnector,
   kaikasHooks,
@@ -12,7 +20,7 @@ import {
   metamaskStore,
 } from './connector';
 
-export type WalletLibraryType = {
+export type WalletLibraryStore = {
   connector: Connector;
   hooks: Web3ReactHooks;
   store: Web3ReactStore;
@@ -21,10 +29,10 @@ export type WalletLibraryType = {
   balance: number;
   account: string;
   connect: (type: WalletType, chainId?: number) => Promise<void>;
-  fetchBalance: (provider: WalletLibrary<any>) => Promise<void>;
+  fetchBalance: (provider: WalletLibrary<SupportedProvider>) => Promise<void>;
 };
 
-export const useWeb3Store = create<WalletLibraryType>((set, get) => ({
+export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
   connector: metamaskConnector,
   hooks: metamaskHooks,
   store: metamaskStore,
