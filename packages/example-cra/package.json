@@ -1,9 +1,9 @@
 {
   "private": true,
   "name": "example-cra",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dependencies": {
-    "@hashlike-official/extend-web3-react-wrapper": "^1.0.19",
+    "@hashlike-official/extend-web3-react-wrapper": "^1.0.21",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
