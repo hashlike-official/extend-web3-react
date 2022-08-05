@@ -1,4 +1,15 @@
-import type { Actions, AddEthereumChainParameter, Provider } from '@web3-react/types';
+/* eslint-disable 
+  @typescript-eslint/no-unsafe-call,
+  @typescript-eslint/no-explicit-any,
+  @typescript-eslint/no-unsafe-assignment
+*/
+
+import type {
+  Actions,
+  AddEthereumChainParameter,
+  Provider,
+  WatchAssetParameters,
+} from '@web3-react/types';
 import { Connector } from '@web3-react/types';
 import Caver, { AbiItem, Contract, RequestProvider } from 'caver-js';
 
@@ -15,6 +26,14 @@ type KaikasProvider = Provider & {
   networkVersion: string;
   selectedAddress: string;
   enable: () => Promise<string[]>;
+  sendAsync: (
+    option: {
+      method: string;
+      params: any;
+      id: number;
+    },
+    callback: (err: Error, result: any) => void
+  ) => void;
   _kaikas: {
     isEnabled: () => boolean;
   };
@@ -33,28 +52,14 @@ export class Kaikas extends Connector {
   public provider: KaikasProvider | undefined;
   public customProvider: Caver | undefined;
 
-  /**
-   * @param connectEagerly - A flag indicating whether connection should be initiated when the class is constructed.
-   */
-  constructor(actions: Actions, connectEagerly = false) {
-    super(actions);
+  constructor(actions: Actions, onError?: (error: Error) => void) {
+    super(actions, onError);
 
-    if (connectEagerly && typeof window === 'undefined') {
-      throw new Error(
-        'connectEagerly = true is invalid for SSR, instead use the connectEagerly method in a useEffect'
-      );
-    }
-
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    if (typeof window.klaytn === 'undefined') {
-      this.actions.reportError(new NoKaikasError());
+    if (typeof window === 'undefined' || typeof window.klaytn === 'undefined') {
+      this.onError?.(new NoKaikasError());
     } else {
       this.provider = window.klaytn;
       this.customProvider = new Caver(window.klaytn as RequestProvider);
-      if (connectEagerly) void this.connectEagerly();
     }
   }
 
@@ -78,7 +83,10 @@ export class Kaikas extends Connector {
       }
     } catch (error) {
       console.debug('Could not connect eagerly', error);
-      cancelActivation();
+      // we should be able to use `cancelActivation` here, but on mobile, metamask emits a 'connect'
+      // event, meaning that chainId is updated, and cancelActivation doesn't work because an intermediary
+      // update has occurred, so we reset state instead
+      this.actions.resetState();
     }
   }
 
@@ -91,16 +99,15 @@ export class Kaikas extends Connector {
    * argument is of type AddEthereumChainParameter, in which case the user will be prompted to add the chain with the
    * specified parameters first, before being prompted to switch.
    */
-  public async activate(
-    desiredChainIdOrChainParameters?: number | AddEthereumChainParameter
-  ): Promise<void> {
-    if (!this.provider) return this.actions.reportError(new NoKaikasError());
+  public async activate(desiredChainIdOrChainParameters?: number | AddEthereumChainParameter) {
+    let cancelActivation: (() => void) | undefined = undefined;
 
-    if (!this.provider._kaikas.isEnabled()) this.actions.startActivation();
-
-    this.setChangeEventListener();
+    if (!this.provider?._kaikas.isEnabled()) cancelActivation = this.actions.startActivation();
 
     try {
+      this.setChangeEventListener();
+      if (!this.provider) throw new NoKaikasError();
+
       const accounts = await Promise.all([this.provider.enable()]);
       const receivedChainId = Number(this.provider.networkVersion);
       const desiredChainId =
@@ -119,10 +126,46 @@ export class Kaikas extends Connector {
         );
       }
     } catch (error) {
+      cancelActivation?.();
+
       if (error instanceof Error) {
-        this.actions.reportError(error);
+        throw error;
       }
     }
+  }
+
+  public async watchAsset({
+    address,
+    symbol,
+    decimals,
+    image,
+  }: WatchAssetParameters): Promise<true> {
+    if (!this.provider) throw new Error('No provider');
+
+    return new Promise((res, rej) => {
+      this.provider?.sendAsync(
+        {
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20', // Initially only supports ERC20, but eventually more!
+            options: {
+              address, // The address that the token is at.
+              symbol, // A ticker symbol or shorthand, up to 5 chars.
+              decimals, // The number of decimals in the token
+              image, // A string url of the token logo
+            },
+          },
+          id: Math.round(Math.random() * 100000),
+        },
+        (err) => {
+          if (err) {
+            rej(err);
+          } else {
+            res(true);
+          }
+        }
+      );
+    });
   }
 
   private setChangeEventListener() {
@@ -134,7 +177,7 @@ export class Kaikas extends Connector {
 
     this.provider.on('accountsChanged', (accounts: string[]): void => {
       if (accounts.length === 0) {
-        this.actions.reportError(undefined);
+        this.actions.resetState();
       } else {
         this.actions.update({ accounts });
       }

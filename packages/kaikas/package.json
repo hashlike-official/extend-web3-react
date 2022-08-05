@@ -11,7 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.9",
+  "version": "1.0.12",
   "files": [
     "dist/*"
   ],
@@ -24,14 +24,12 @@
     "start": "tsc --watch"
   },
   "dependencies": {
-    "@web3-react/types": "^8.0.11-beta.0",
+    "@web3-react/store": "^8.0.25-beta.0",
+    "@web3-react/types": "^8.0.20-beta.0",
     "caver-js": "^1.8.0"
   },
   "peerDependencies": {
     "react": ">=16.8"
-  },
-  "devDependencies": {
-    "@web3-react/store": "^8.0.16-beta.0"
   },
   "gitHead": "fcbb83ca413beadb485f49bc7653949cdfe85c58"
 }

@@ -28,8 +28,10 @@ export type WalletLibraryStore = {
   pending: number;
   balance: number;
   account: string;
+  error: Error | undefined;
   connect: (type: WalletType, chainId?: number) => Promise<void>;
   fetchBalance: (provider: WalletLibrary<SupportedProvider>) => Promise<void>;
+  setError: (err: Error) => void;
 };
 
 export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
@@ -40,33 +42,49 @@ export const useWeb3Store = create<WalletLibraryStore>((set, get) => ({
   pending: 0,
   balance: 0,
   account: '',
+  error: undefined,
   fetchBalance: async (provider) => {
     const balance = await provider.getBalanceOf(get().account);
     set({ balance: Number(balance) });
   },
   connect: async (type, chainId?) => {
     window.localStorage.removeItem('walletType');
-    void get().connector.deactivate();
+    const connector = get().connector;
+    await connector.deactivate?.();
+    await connector.resetState();
+
     set({ currentType: type });
     window.localStorage.setItem('walletType', type);
 
     switch (type) {
       case 'MetaMask':
-        await metamaskConnector.activate(chainId ? getAddChainParameters(chainId) : undefined);
-        set({
-          connector: metamaskConnector,
-          hooks: metamaskHooks,
-          store: metamaskStore,
-        });
+        try {
+          await metamaskConnector.activate(chainId ? getAddChainParameters(chainId) : undefined);
+          set({
+            connector: metamaskConnector,
+            hooks: metamaskHooks,
+            store: metamaskStore,
+          });
+        } catch (err) {
+          if (err instanceof Error) get().setError(err);
+        }
+
         break;
       case 'Kaikas':
-        await kaikasConnector.activate(chainId);
-        set({
-          connector: kaikasConnector,
-          hooks: kaikasHooks,
-          store: kaikasStore,
-        });
+        try {
+          await kaikasConnector.activate(chainId);
+          set({
+            connector: kaikasConnector,
+            hooks: kaikasHooks,
+            store: kaikasStore,
+          });
+        } catch (err) {
+          if (err instanceof Error) get().setError(err);
+        }
         break;
     }
+  },
+  setError(error) {
+    set(() => ({ error }));
   },
 }));

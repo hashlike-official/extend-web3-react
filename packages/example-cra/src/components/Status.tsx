@@ -1,8 +1,8 @@
 import { useWeb3Store } from '@hashlike-official/extend-web3-react-wrapper';
 
 export default function Status() {
-  const { useIsActivating, useError, useIsActive } = useWeb3Store((state) => state.hooks);
-  const error = useError();
+  const { useIsActivating, useIsActive } = useWeb3Store((state) => state.hooks);
+  const error = useWeb3Store((state) => state.error);
   const isActivating = useIsActivating();
   const isActive = useIsActive();
   return (
