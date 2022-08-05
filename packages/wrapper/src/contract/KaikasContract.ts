@@ -52,7 +52,6 @@ export class KaikasContract extends WrappedContract<Contract> {
           callback?.onTransactionHash?.(txHash);
           if (err) {
             console.error(err);
-            throw err;
           }
         }
       );
