@@ -23,6 +23,7 @@ export class MetamaskContract extends WrappedContract<Contract> {
       const result = await this.originContract[methodName](...params, option);
       return result;
     } catch (e) {
+      console.error(e);
       if (e instanceof Error) {
         throw e;
       }
@@ -34,18 +35,32 @@ export class MetamaskContract extends WrappedContract<Contract> {
       throw Error('Not Exist Method');
     }
 
-    if (!option.gasPrice) {
-      option.gasPrice = await this.originContract.provider.getGasPrice();
-    }
+    try {
+      if (!option.gasPrice) {
+        option.gasPrice = await this.originContract.provider.getGasPrice();
+      }
 
-    const result = await this.originContract[methodName](...params, option);
-    callback?.onTransactionHash?.(result.hash);
-    const receipt = await result.wait();
-    return receipt;
+      const result = await this.originContract[methodName](...params, option);
+      callback?.onTransactionHash?.(result.hash);
+      const receipt = await result.wait();
+      return receipt;
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        throw e;
+      }
+    }
   }
 
   public async estimateGas({ methodName, params = [], option = {} }: SendParamType) {
-    const estimation = await this.originContract.estimateGas[methodName](...params, option);
-    return formatEther(estimation);
+    try {
+      const estimation = await this.originContract.estimateGas[methodName](...params, option);
+      return formatEther(estimation);
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        throw e;
+      }
+    }
   }
 }

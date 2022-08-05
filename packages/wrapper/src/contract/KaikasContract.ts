@@ -30,6 +30,7 @@ export class KaikasContract extends WrappedContract<Contract> {
       const result = await this.originContract.methods[methodName](...params).call(opt);
       return result;
     } catch (e) {
+      console.error(e);
       if (e instanceof Error) {
         throw e;
       }
@@ -40,28 +41,42 @@ export class KaikasContract extends WrappedContract<Contract> {
     if (!this.originContract.methods[methodName]) {
       throw Error('Not Exist Method');
     }
-    const opt = this.parseOption({ option });
-    if (!opt.gas) {
-      opt.gas = await this.estimateGas({ methodName, params, option });
-    }
-    const result = await this.originContract.methods[methodName](...params).send(
-      opt,
-      (err: Error, txHash: string) => {
-        callback?.onTransactionHash?.(txHash);
-        if (err) {
-          console.error(err);
-          throw err;
-        }
+    try {
+      const opt = this.parseOption({ option });
+      if (!opt.gas) {
+        opt.gas = await this.estimateGas({ methodName, params, option });
       }
-    );
-    return result;
+      const result = await this.originContract.methods[methodName](...params).send(
+        opt,
+        (err: Error, txHash: string) => {
+          callback?.onTransactionHash?.(txHash);
+          if (err) {
+            console.error(err);
+            throw err;
+          }
+        }
+      );
+      return result;
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        throw e;
+      }
+    }
   }
 
   public async estimateGas({ methodName, params = [], option = {} }: SendParamType) {
-    const estimation = await this.originContract.methods[methodName](...params).estimateGas({
-      ...this.parseOption({ option }),
-    });
-    return estimation;
+    try {
+      const estimation = await this.originContract.methods[methodName](...params).estimateGas({
+        ...this.parseOption({ option }),
+      });
+      return estimation;
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        throw e;
+      }
+    }
   }
 
   private parseOption({ option }: Partial<SendParamType>) {
