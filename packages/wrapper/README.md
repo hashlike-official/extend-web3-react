@@ -15,8 +15,6 @@ Look packages/example-cra
 
 ### state management
 
-using zustand, manage states below:
-
 - states from web3-react
 - currently connected wallet, account, balance  
 - functions that can change states
@@ -52,7 +50,7 @@ export default function MyComponent() {
 
 ### hooks
 
-- useProvider : it return connected wallet's provider like Web3Provider(@ethersproject/providers), Caver(caver-js)
+- useProvider : it returns connected wallet's provider like Web3Provider(@ethersproject/providers), Caver(caver-js)
 
   ```typescript
   const provider = useProvider();
@@ -66,7 +64,7 @@ export default function MyComponent() {
   // ...
   ```
 
-- useTransfer : it return function which can submits transaction to the network to be mined.
+- useTransfer : it returns function which can submits transaction to the network.
 
   ```typescript
   const transfer = useTransfer();
@@ -80,11 +78,11 @@ export default function MyComponent() {
   // ...
   ```
 
-- InitWalletLib : using this hook, you can initialize account, balance with specipic wallet type which stored in localStorage. and can use this hook with specific chainId.(but it doesn't work with kaikas)
+- useInitWallet : you can initialize account and balance with specipic wallet type(metamask, kaikas) which stored in localStorage and specific chainId.(but it doesn't work with kaikas)
 
   ```typescript
   function App() {
-    InitWalletLib(1001);
+    useInitWallet(1001);
     // ...
   }
   ```
