@@ -12,7 +12,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.22",
+  "version": "1.0.23",
   "files": [
     "dist/*"
   ],
@@ -28,7 +28,7 @@
     "@ethersproject/contracts": "^5.6.0",
     "@ethersproject/providers": "^5.6.5",
     "@ethersproject/units": "^5.6.0",
-    "@hashlike-official/extend-web3-react-kaikas": "^1.0.13",
+    "@hashlike-official/extend-web3-react-kaikas": "^1.0.14",
     "@web3-react/core": "8.0.35-beta.0",
     "@web3-react/metamask": "8.0.28-beta.0",
     "@web3-react/store": "^8.0.25-beta.0",
