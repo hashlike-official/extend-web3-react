@@ -26,56 +26,34 @@ export class KaikasContract extends WrappedContract<Contract> {
     if (!opt.gas) {
       opt.gas = await this.estimateGas({ methodName, params, option });
     }
-    try {
-      const result = await this.originContract.methods[methodName](...params).call(opt);
-      return result;
-    } catch (e) {
-      console.error(e);
-      if (e instanceof Error) {
-        throw e;
-      }
-    }
+
+    return await this.originContract.methods[methodName](...params).call(opt);
   }
 
   public async send({ methodName, params = [], option = {}, callback }: SendParamType) {
     if (!this.originContract.methods[methodName]) {
       throw Error('Not Exist Method');
     }
-    try {
-      const opt = this.parseOption({ option });
-      if (!opt.gas) {
-        opt.gas = await this.estimateGas({ methodName, params, option });
-      }
-      const result = await this.originContract.methods[methodName](...params).send(
-        opt,
-        (err: Error, txHash: string) => {
-          callback?.onTransactionHash?.(txHash);
-          if (err) {
-            console.error(err);
-          }
-        }
-      );
-      return result;
-    } catch (e) {
-      console.error(e);
-      if (e instanceof Error) {
-        throw e;
-      }
+    const opt = this.parseOption({ option });
+    if (!opt.gas) {
+      opt.gas = await this.estimateGas({ methodName, params, option });
     }
+
+    return await this.originContract.methods[methodName](...params).send(
+      opt,
+      (err: Error, txHash: string) => {
+        callback?.onTransactionHash?.(txHash);
+        if (err) {
+          console.error(err);
+        }
+      }
+    );
   }
 
   public async estimateGas({ methodName, params = [], option = {} }: SendParamType) {
-    try {
-      const estimation = await this.originContract.methods[methodName](...params).estimateGas({
-        ...this.parseOption({ option }),
-      });
-      return estimation;
-    } catch (e) {
-      console.error(e);
-      if (e instanceof Error) {
-        throw e;
-      }
-    }
+    return await this.originContract.methods[methodName](...params).estimateGas({
+      ...this.parseOption({ option }),
+    });
   }
 
   private parseOption({ option }: Partial<SendParamType>) {
