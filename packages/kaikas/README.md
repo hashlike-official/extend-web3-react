@@ -1,5 +1,7 @@
 # @hashlike-official/extend-web3-react-kaikas
 
+web3-react connector implementation for connecting kaikas wallet.
+
 ## example
 
 ```typescript
